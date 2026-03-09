@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import CommandHeader from "@/components/dashboard/CommandHeader";
 import TimeMachineChart from "@/components/dashboard/TimeMachineChart";
 import SalesLeaderboard from "@/components/dashboard/SalesLeaderboard";
+import MonthGhostChart from "@/components/dashboard/MonthGhostChart";
 import ClientMatrix from "@/components/dashboard/ClientMatrix";
 import RevenueDonut from "@/components/dashboard/RevenueDonut";
 
