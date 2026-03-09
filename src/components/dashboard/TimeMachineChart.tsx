@@ -1,9 +1,10 @@
 import { useState } from "react";
 import {
-  AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ComposedChart,
+  AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ComposedChart, Brush,
 } from "recharts";
 import { motion } from "framer-motion";
 import { dailyData } from "@/data/mockData";
+import { useDashboardSettings } from "@/contexts/DashboardSettings";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
@@ -14,15 +15,21 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   const variancePct = py > 0 ? ((variance / py) * 100).toFixed(1) : "N/A";
 
   return (
-    <div className="glass-card p-3 border border-border text-xs font-mono shadow-2xl">
+    <div className="glass-card p-3 border border-border text-xs font-mono shadow-2xl backdrop-blur-xl">
       <p className="text-muted-foreground mb-2 font-sans font-medium">{label}</p>
       <div className="space-y-1">
-        <div className="flex justify-between gap-6">
-          <span className="text-neon-green">● CY 2026</span>
-          <span className="text-foreground">${cy.toLocaleString()}</span>
+        <div className="flex justify-between gap-6 items-center">
+          <span className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-neon-green" />
+            CY 2026
+          </span>
+          <span className="text-foreground font-semibold">${cy.toLocaleString()}</span>
         </div>
-        <div className="flex justify-between gap-6">
-          <span className="text-muted-foreground">◌ PY 2025</span>
+        <div className="flex justify-between gap-6 items-center">
+          <span className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-muted-foreground" />
+            PY 2025
+          </span>
           <span className="text-muted-foreground">${py.toLocaleString()}</span>
         </div>
         <div className="border-t border-border pt-1 flex justify-between gap-6">
@@ -38,11 +45,11 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 const TimeMachineChart = () => {
   const [mode, setMode] = useState<"daily" | "cumulative">("cumulative");
+  const { settings } = useDashboardSettings();
 
   const cyKey = mode === "daily" ? "cyDaily" : "cyCumulative";
   const pyKey = mode === "daily" ? "pyDaily" : "pyCumulative";
 
-  // Sample data for performance (show every 3rd day)
   const chartData = dailyData.filter((_, i) => i % 2 === 0 || i === dailyData.length - 1);
 
   return (
@@ -50,7 +57,7 @@ const TimeMachineChart = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <div>
           <h2 className="text-lg font-semibold">The Time Machine</h2>
-          <p className="text-xs text-muted-foreground">Day-by-day CY vs PY comparison</p>
+          <p className="text-xs text-muted-foreground">Day-by-day CY vs PY comparison • drag below to zoom</p>
         </div>
         <div className="flex bg-secondary/80 rounded-lg p-0.5 border border-border/50">
           {(["daily", "cumulative"] as const).map((m) => (
@@ -71,7 +78,7 @@ const TimeMachineChart = () => {
 
       <div className="flex-1 min-h-[280px]">
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={chartData} margin={{ top: 5, right: 5, left: -15, bottom: 0 }}>
+          <ComposedChart data={chartData} margin={{ top: 5, right: 5, left: -15, bottom: 30 }}>
             <defs>
               <linearGradient id="cyGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="hsl(160, 84%, 39%)" stopOpacity={0.4} />
@@ -114,6 +121,14 @@ const TimeMachineChart = () => {
               strokeDasharray="6 3"
               dot={false}
               animationDuration={1500}
+            />
+            <Brush
+              dataKey="date"
+              height={20}
+              stroke="hsl(217, 33%, 25%)"
+              fill="hsl(222, 47%, 8%)"
+              travellerWidth={8}
+              tickFormatter={() => ""}
             />
           </ComposedChart>
         </ResponsiveContainer>
