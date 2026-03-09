@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import { motion } from "framer-motion";
 import { topCustomers } from "@/data/mockData";
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -7,21 +9,27 @@ const CustomTooltip = ({ active, payload }: any) => {
   const growth = ((d.revenue - d.pyRevenue) / d.pyRevenue) * 100;
 
   return (
-    <div className="glass-card p-3 border border-border text-xs font-mono shadow-2xl">
+    <div className="glass-card p-3 border border-border text-xs font-mono shadow-2xl backdrop-blur-xl">
       <p className="text-foreground font-sans font-medium mb-2">{d.name}</p>
       <div className="space-y-1">
-        <div className="flex justify-between gap-4">
-          <span className="text-muted-foreground">CY Revenue</span>
-          <span>${d.revenue.toLocaleString()}</span>
+        <div className="flex justify-between gap-4 items-center">
+          <span className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-neon-green" />
+            CY Revenue
+          </span>
+          <span className="font-semibold">${d.revenue.toLocaleString()}</span>
         </div>
-        <div className="flex justify-between gap-4">
-          <span className="text-muted-foreground">PY Revenue</span>
+        <div className="flex justify-between gap-4 items-center">
+          <span className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-muted-foreground" />
+            PY Revenue
+          </span>
           <span className="text-muted-foreground">${d.pyRevenue.toLocaleString()}</span>
         </div>
         <div className="border-t border-border pt-1 flex justify-between gap-4">
           <span className="text-muted-foreground">YoY</span>
           <span className={growth >= 0 ? "neon-text-green" : "neon-text-rose"}>
-            {growth >= 0 ? "+" : ""}{growth.toFixed(1)}%
+            {growth >= 0 ? "↑" : "↓"} {Math.abs(growth).toFixed(1)}%
           </span>
         </div>
       </div>
@@ -30,6 +38,8 @@ const CustomTooltip = ({ active, payload }: any) => {
 };
 
 const ClientMatrix = () => {
+  const [activeIdx, setActiveIdx] = useState<number | null>(null);
+
   return (
     <div className="glass-card p-4 md:p-6 h-full flex flex-col">
       <div className="mb-4">
@@ -61,14 +71,22 @@ const ClientMatrix = () => {
               tickFormatter={(v) => v.length > 14 ? v.slice(0, 14) + "…" : v}
             />
             <Tooltip content={<CustomTooltip />} cursor={{ fill: "hsl(217, 33%, 12%)" }} />
-            <Bar dataKey="revenue" radius={[0, 4, 4, 0]} animationDuration={1200}>
-              {topCustomers.map((entry) => {
+            <Bar
+              dataKey="revenue"
+              radius={[0, 4, 4, 0]}
+              animationDuration={1200}
+              onMouseEnter={(_, idx) => setActiveIdx(idx)}
+              onMouseLeave={() => setActiveIdx(null)}
+            >
+              {topCustomers.map((entry, idx) => {
                 const growth = (entry.revenue - entry.pyRevenue) / entry.pyRevenue;
+                const isActive = activeIdx === idx;
                 return (
                   <Cell
                     key={entry.name}
                     fill={growth >= 0 ? "hsl(160, 84%, 39%)" : "hsl(350, 89%, 60%)"}
-                    fillOpacity={0.7}
+                    fillOpacity={activeIdx === null ? 0.7 : isActive ? 1 : 0.25}
+                    style={{ transition: "fill-opacity 0.3s ease" }}
                   />
                 );
               })}

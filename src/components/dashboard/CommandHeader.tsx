@@ -1,6 +1,7 @@
-import { CalendarDays, TrendingUp, TrendingDown, DollarSign, Activity, BarChart3 } from "lucide-react";
+import { CalendarDays, TrendingUp, TrendingDown, DollarSign, Activity, BarChart3, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 import AnimatedNumber from "./AnimatedNumber";
+import ContextBadge from "./ContextBadge";
 import { kpis } from "@/data/mockData";
 
 const CommandHeader = () => {
@@ -13,13 +14,16 @@ const CommandHeader = () => {
       prefix: "$",
       icon: DollarSign,
       accent: "neon-text-green",
+      badge: { value: kpis.yoyGrowth, label: "vs PY" },
+      highlight: true,
     },
     {
       label: "CY vs PY",
-      value: kpis.totalRevenueCY - kpis.totalRevenuePY,
+      value: Math.abs(kpis.totalRevenueCY - kpis.totalRevenuePY),
       prefix: kpis.totalRevenueCY > kpis.totalRevenuePY ? "+$" : "-$",
       icon: BarChart3,
       accent: kpis.totalRevenueCY > kpis.totalRevenuePY ? "neon-text-green" : "neon-text-rose",
+      badge: null,
     },
     {
       label: "Daily Run Rate",
@@ -27,6 +31,7 @@ const CommandHeader = () => {
       prefix: "$",
       icon: Activity,
       accent: "neon-text-green",
+      badge: { value: 8.2, label: "vs Last Week" },
     },
     {
       label: "YoY Growth",
@@ -36,7 +41,7 @@ const CommandHeader = () => {
       decimals: 1,
       icon: isGrowthPositive ? TrendingUp : TrendingDown,
       accent: isGrowthPositive ? "neon-text-green" : "neon-text-rose",
-      badge: true,
+      pulsingBadge: true,
     },
   ];
 
@@ -47,9 +52,12 @@ const CommandHeader = () => {
           <h1 className="text-xl md:text-2xl font-bold tracking-tight">
             Sales Analytics <span className="neon-text-green">Command Center</span>
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">Real-time performance intelligence</p>
+          <p className="text-sm text-muted-foreground mt-1 flex items-center gap-2">
+            <Zap className="w-3 h-3 text-neon-amber" />
+            Real-time performance intelligence
+          </p>
         </div>
-        <div className="flex items-center gap-2 glass-card px-3 py-2 text-sm text-muted-foreground">
+        <div className="flex items-center gap-2 glass-card px-3 py-2 text-sm text-muted-foreground hover:border-primary/30 transition-colors cursor-default">
           <CalendarDays className="w-4 h-4 text-neon-green" />
           <span className="font-mono">Jan 1, 2026 — Mar 9, 2026</span>
         </div>
@@ -62,13 +70,16 @@ const CommandHeader = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1, duration: 0.5 }}
-            className="bg-secondary/50 rounded-lg p-3 md:p-4 border border-border/50"
+            whileHover={{ scale: 1.02, y: -2 }}
+            className={`bg-secondary/50 rounded-lg p-3 md:p-4 border border-border/50 transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_15px_hsl(var(--neon-blue)/0.12)] ${
+              kpi.highlight ? "gradient-border-animated" : ""
+            }`}
           >
             <div className="flex items-center gap-2 mb-2">
               <kpi.icon className="w-4 h-4 text-muted-foreground" />
               <span className="text-xs text-muted-foreground uppercase tracking-wider">{kpi.label}</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <AnimatedNumber
                 value={kpi.value}
                 prefix={kpi.prefix}
@@ -76,12 +87,17 @@ const CommandHeader = () => {
                 decimals={kpi.decimals || 0}
                 className={`text-lg md:text-2xl font-bold font-mono ${kpi.accent}`}
               />
-              {kpi.badge && (
+              {kpi.pulsingBadge && (
                 <span className={isGrowthPositive ? "badge-pulse-green" : "badge-pulse-rose"}>
                   {isGrowthPositive ? "▲" : "▼"}
                 </span>
               )}
             </div>
+            {kpi.badge && (
+              <div className="mt-2">
+                <ContextBadge value={kpi.badge.value} label={kpi.badge.label} />
+              </div>
+            )}
           </motion.div>
         ))}
       </div>
