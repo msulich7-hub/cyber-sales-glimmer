@@ -32,6 +32,11 @@ const Index = () => {
           <CommandHeader />
         </motion.div>
 
+        {/* Month Ghost Chart - full width hero */}
+        <motion.div variants={item}>
+          <MonthGhostChart />
+        </motion.div>
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Hero chart spans 2 cols */}
           <motion.div variants={item} className="lg:col-span-2 min-h-[400px]">
