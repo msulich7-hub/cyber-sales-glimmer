@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import CommandHeader from "@/components/dashboard/CommandHeader";
 import TimeMachineChart from "@/components/dashboard/TimeMachineChart";
 import SalesLeaderboard from "@/components/dashboard/SalesLeaderboard";
+import MonthGhostChart from "@/components/dashboard/MonthGhostChart";
 import ClientMatrix from "@/components/dashboard/ClientMatrix";
 import RevenueDonut from "@/components/dashboard/RevenueDonut";
 
@@ -29,6 +30,11 @@ const Index = () => {
       >
         <motion.div variants={item}>
           <CommandHeader />
+        </motion.div>
+
+        {/* Month Ghost Chart - full width hero */}
+        <motion.div variants={item}>
+          <MonthGhostChart />
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
