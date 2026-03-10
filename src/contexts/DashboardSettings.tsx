@@ -8,6 +8,11 @@ export interface DashboardSettings {
   showRevenueDonut: boolean;
   showTimeMachine: boolean;
   showMonthGhost: boolean;
+  showForecast: boolean;
+  showHeatmap: boolean;
+  showFunnel: boolean;
+  showRegions: boolean;
+  showWaterfall: boolean;
 }
 
 interface DashboardContextType {
@@ -34,6 +39,11 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
     showRevenueDonut: true,
     showTimeMachine: true,
     showMonthGhost: true,
+    showForecast: true,
+    showHeatmap: true,
+    showFunnel: true,
+    showRegions: true,
+    showWaterfall: true,
   });
   const [drawerOpen, setDrawerOpen] = useState(false);
 

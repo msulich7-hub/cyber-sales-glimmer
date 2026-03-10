@@ -5,6 +5,11 @@ import SalesLeaderboard from "@/components/dashboard/SalesLeaderboard";
 import MonthGhostChart from "@/components/dashboard/MonthGhostChart";
 import ClientMatrix from "@/components/dashboard/ClientMatrix";
 import RevenueDonut from "@/components/dashboard/RevenueDonut";
+import ForecastChart from "@/components/dashboard/ForecastChart";
+import RevenueHeatmap from "@/components/dashboard/RevenueHeatmap";
+import SalesFunnel from "@/components/dashboard/SalesFunnel";
+import RegionPerformance from "@/components/dashboard/RegionPerformance";
+import WaterfallChart from "@/components/dashboard/WaterfallChart";
 import SettingsDrawer from "@/components/dashboard/SettingsDrawer";
 import { DashboardProvider, useDashboardSettings } from "@/contexts/DashboardSettings";
 
@@ -21,9 +26,12 @@ const item = {
   show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
 };
 
+const animatedExit = { opacity: 0, scale: 0.95 };
+
 const DashboardContent = () => {
   const { settings } = useDashboardSettings();
   const compact = settings.compactMode;
+  const gap = compact ? "gap-2" : "gap-4";
 
   return (
     <div className={`min-h-screen bg-background ${compact ? "p-2 md:p-3" : "p-3 md:p-6"}`}>
@@ -37,79 +45,98 @@ const DashboardContent = () => {
           <CommandHeader />
         </motion.div>
 
+        {/* Month Ghost - full width hero */}
         <AnimatePresence mode="popLayout">
           {settings.showMonthGhost && (
-            <motion.div
-              key="ghost"
-              variants={item}
-              initial="hidden"
-              animate="show"
-              exit={{ opacity: 0, height: 0, marginBottom: 0, overflow: "hidden" }}
-              transition={{ duration: 0.3 }}
-            >
+            <motion.div key="ghost" variants={item} initial="hidden" animate="show" exit={animatedExit}>
               <MonthGhostChart />
             </motion.div>
           )}
         </AnimatePresence>
 
-        <div className={`grid grid-cols-1 lg:grid-cols-3 ${compact ? "gap-2" : "gap-4"}`}>
+        {/* Forecast - full width */}
+        <AnimatePresence mode="popLayout">
+          {settings.showForecast && (
+            <motion.div key="forecast" variants={item} initial="hidden" animate="show" exit={animatedExit}>
+              <ForecastChart />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Time Machine + Leaderboard */}
+        <div className={`grid grid-cols-1 lg:grid-cols-3 ${gap}`}>
           <AnimatePresence mode="popLayout">
             {settings.showTimeMachine && (
-              <motion.div
-                key="time"
-                variants={item}
-                initial="hidden"
-                animate="show"
-                exit={{ opacity: 0, scale: 0.95 }}
-                className={`lg:col-span-2 ${compact ? "min-h-[320px]" : "min-h-[400px]"}`}
-              >
+              <motion.div key="time" variants={item} initial="hidden" animate="show" exit={animatedExit}
+                className={`lg:col-span-2 ${compact ? "min-h-[320px]" : "min-h-[400px]"}`}>
                 <TimeMachineChart />
               </motion.div>
             )}
           </AnimatePresence>
-
           <AnimatePresence mode="popLayout">
             {settings.showLeaderboard && (
-              <motion.div
-                key="leader"
-                variants={item}
-                initial="hidden"
-                animate="show"
-                exit={{ opacity: 0, scale: 0.95 }}
-                className={compact ? "min-h-[320px]" : "min-h-[400px]"}
-              >
+              <motion.div key="leader" variants={item} initial="hidden" animate="show" exit={animatedExit}
+                className={compact ? "min-h-[320px]" : "min-h-[400px]"}>
                 <SalesLeaderboard />
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        <div className={`grid grid-cols-1 lg:grid-cols-2 ${compact ? "gap-2" : "gap-4"}`}>
+        {/* Heatmap + Funnel */}
+        <div className={`grid grid-cols-1 lg:grid-cols-2 ${gap}`}>
+          <AnimatePresence mode="popLayout">
+            {settings.showHeatmap && (
+              <motion.div key="heatmap" variants={item} initial="hidden" animate="show" exit={animatedExit}
+                className={compact ? "min-h-[260px]" : "min-h-[320px]"}>
+                <RevenueHeatmap />
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <AnimatePresence mode="popLayout">
+            {settings.showFunnel && (
+              <motion.div key="funnel" variants={item} initial="hidden" animate="show" exit={animatedExit}
+                className={compact ? "min-h-[260px]" : "min-h-[320px]"}>
+                <SalesFunnel />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Waterfall + Regions */}
+        <div className={`grid grid-cols-1 lg:grid-cols-2 ${gap}`}>
+          <AnimatePresence mode="popLayout">
+            {settings.showWaterfall && (
+              <motion.div key="waterfall" variants={item} initial="hidden" animate="show" exit={animatedExit}
+                className={compact ? "min-h-[280px]" : "min-h-[340px]"}>
+                <WaterfallChart />
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <AnimatePresence mode="popLayout">
+            {settings.showRegions && (
+              <motion.div key="regions" variants={item} initial="hidden" animate="show" exit={animatedExit}
+                className={compact ? "min-h-[280px]" : "min-h-[340px]"}>
+                <RegionPerformance />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Client Matrix + Revenue Donut */}
+        <div className={`grid grid-cols-1 lg:grid-cols-2 ${gap}`}>
           <AnimatePresence mode="popLayout">
             {settings.showClientMatrix && (
-              <motion.div
-                key="client"
-                variants={item}
-                initial="hidden"
-                animate="show"
-                exit={{ opacity: 0, scale: 0.95 }}
-                className={compact ? "min-h-[300px]" : "min-h-[380px]"}
-              >
+              <motion.div key="client" variants={item} initial="hidden" animate="show" exit={animatedExit}
+                className={compact ? "min-h-[300px]" : "min-h-[380px]"}>
                 <ClientMatrix />
               </motion.div>
             )}
           </AnimatePresence>
-
           <AnimatePresence mode="popLayout">
             {settings.showRevenueDonut && (
-              <motion.div
-                key="donut"
-                variants={item}
-                initial="hidden"
-                animate="show"
-                exit={{ opacity: 0, scale: 0.95 }}
-                className={compact ? "min-h-[300px]" : "min-h-[380px]"}
-              >
+              <motion.div key="donut" variants={item} initial="hidden" animate="show" exit={animatedExit}
+                className={compact ? "min-h-[300px]" : "min-h-[380px]"}>
                 <RevenueDonut />
               </motion.div>
             )}
