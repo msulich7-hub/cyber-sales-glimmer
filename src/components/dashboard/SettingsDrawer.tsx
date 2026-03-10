@@ -16,6 +16,11 @@ const SettingsDrawer = () => {
     { key: "showLeaderboard" as const, label: "Sales Leaderboard" },
     { key: "showClientMatrix" as const, label: "Client Matrix" },
     { key: "showRevenueDonut" as const, label: "Revenue Donut" },
+    { key: "showForecast" as const, label: "Revenue Forecast" },
+    { key: "showHeatmap" as const, label: "Revenue Heatmap" },
+    { key: "showFunnel" as const, label: "Sales Pipeline" },
+    { key: "showRegions" as const, label: "Regional Performance" },
+    { key: "showWaterfall" as const, label: "Revenue Bridge" },
   ];
 
   return (
@@ -29,7 +34,7 @@ const SettingsDrawer = () => {
           <Settings className="w-5 h-5 text-neon-blue" />
         </motion.button>
       </SheetTrigger>
-      <SheetContent className="glass-card border-l border-border bg-card/95 backdrop-blur-2xl w-80">
+      <SheetContent className="glass-card border-l border-border bg-card/95 backdrop-blur-2xl w-80 overflow-y-auto">
         <SheetHeader>
           <SheetTitle className="text-foreground flex items-center gap-2">
             <Settings className="w-4 h-4 text-neon-blue" />
@@ -38,7 +43,6 @@ const SettingsDrawer = () => {
         </SheetHeader>
 
         <div className="mt-6 space-y-6">
-          {/* Chart Type */}
           <div className="space-y-3">
             <h3 className="text-xs uppercase tracking-wider text-muted-foreground font-medium flex items-center gap-2">
               <BarChart3 className="w-3.5 h-3.5" />
@@ -63,7 +67,6 @@ const SettingsDrawer = () => {
 
           <Separator className="bg-border/50" />
 
-          {/* Compact Mode */}
           <div className="space-y-3">
             <h3 className="text-xs uppercase tracking-wider text-muted-foreground font-medium flex items-center gap-2">
               <Minimize2 className="w-3.5 h-3.5" />
@@ -81,7 +84,6 @@ const SettingsDrawer = () => {
 
           <Separator className="bg-border/50" />
 
-          {/* Widget Visibility */}
           <div className="space-y-3">
             <h3 className="text-xs uppercase tracking-wider text-muted-foreground font-medium flex items-center gap-2">
               <Eye className="w-3.5 h-3.5" />
