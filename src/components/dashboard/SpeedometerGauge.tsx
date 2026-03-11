@@ -73,8 +73,7 @@ const SpeedometerGauge = ({
             value={value}
             suffix={suffix}
             decimals={suffix === "%" ? 1 : 0}
-            className="text-lg font-bold font-mono"
-            style={{ color: statusColor }}
+            className="text-lg font-bold font-mono text-foreground"
           />
         </div>
       </div>
