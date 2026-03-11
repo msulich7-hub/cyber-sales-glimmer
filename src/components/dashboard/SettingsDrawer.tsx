@@ -21,6 +21,8 @@ const SettingsDrawer = () => {
     { key: "showFunnel" as const, label: "Sales Pipeline" },
     { key: "showRegions" as const, label: "Regional Performance" },
     { key: "showWaterfall" as const, label: "Revenue Bridge" },
+    { key: "showGauges" as const, label: "Performance Gauges" },
+    { key: "showActivityFeed" as const, label: "Live Activity Feed" },
   ];
 
   return (

@@ -13,6 +13,8 @@ export interface DashboardSettings {
   showFunnel: boolean;
   showRegions: boolean;
   showWaterfall: boolean;
+  showGauges: boolean;
+  showActivityFeed: boolean;
 }
 
 interface DashboardContextType {
@@ -44,6 +46,8 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
     showFunnel: true,
     showRegions: true,
     showWaterfall: true,
+    showGauges: true,
+    showActivityFeed: true,
   });
   const [drawerOpen, setDrawerOpen] = useState(false);
 
