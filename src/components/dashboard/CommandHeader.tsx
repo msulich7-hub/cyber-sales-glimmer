@@ -1,10 +1,16 @@
-import { CalendarDays, TrendingUp, TrendingDown, DollarSign, Activity, BarChart3, Zap } from "lucide-react";
+import { useState } from "react";
+import { CalendarDays, TrendingUp, TrendingDown, DollarSign, Activity, BarChart3, Zap, Presentation, FileDown, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import AnimatedNumber from "./AnimatedNumber";
 import ContextBadge from "./ContextBadge";
+import ExportPDF from "./ExportPDF";
 import { kpis } from "@/data/mockData";
 
-const CommandHeader = () => {
+interface CommandHeaderProps {
+  onPresentationMode?: () => void;
+}
+
+const CommandHeader = ({ onPresentationMode }: CommandHeaderProps) => {
   const isGrowthPositive = kpis.yoyGrowth > 0;
 
   const kpiCards = [
@@ -57,9 +63,23 @@ const CommandHeader = () => {
             Real-time performance intelligence
           </p>
         </div>
-        <div className="flex items-center gap-2 glass-card px-3 py-2 text-sm text-muted-foreground hover:border-primary/30 transition-colors cursor-default">
-          <CalendarDays className="w-4 h-4 text-neon-green" />
-          <span className="font-mono">Jan 1, 2026 — Mar 9, 2026</span>
+        <div className="flex items-center gap-2 flex-wrap">
+          {onPresentationMode && (
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={onPresentationMode}
+              className="flex items-center gap-2 glass-card px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:border-neon-blue/40 transition-all cursor-pointer"
+            >
+              <Presentation className="w-4 h-4 text-neon-blue" />
+              <span className="font-mono text-xs">Present</span>
+            </motion.button>
+          )}
+          <ExportPDF />
+          <div className="flex items-center gap-2 glass-card px-3 py-2 text-sm text-muted-foreground cursor-default">
+            <CalendarDays className="w-4 h-4 text-neon-green" />
+            <span className="font-mono text-xs">Jan 1 — Mar 9, 2026</span>
+          </div>
         </div>
       </div>
 

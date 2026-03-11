@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CommandHeader from "@/components/dashboard/CommandHeader";
 import TimeMachineChart from "@/components/dashboard/TimeMachineChart";
@@ -10,7 +11,10 @@ import RevenueHeatmap from "@/components/dashboard/RevenueHeatmap";
 import SalesFunnel from "@/components/dashboard/SalesFunnel";
 import RegionPerformance from "@/components/dashboard/RegionPerformance";
 import WaterfallChart from "@/components/dashboard/WaterfallChart";
+import PerformanceGauges from "@/components/dashboard/PerformanceGauges";
+import LiveActivityFeed from "@/components/dashboard/LiveActivityFeed";
 import SettingsDrawer from "@/components/dashboard/SettingsDrawer";
+import PresentationMode from "@/components/dashboard/PresentationMode";
 import { DashboardProvider, useDashboardSettings } from "@/contexts/DashboardSettings";
 
 const container = {
@@ -30,19 +34,21 @@ const animatedExit = { opacity: 0, scale: 0.95 };
 
 const DashboardContent = () => {
   const { settings } = useDashboardSettings();
+  const [presentationOpen, setPresentationOpen] = useState(false);
   const compact = settings.compactMode;
   const gap = compact ? "gap-2" : "gap-4";
 
   return (
     <div className={`min-h-screen bg-background ${compact ? "p-2 md:p-3" : "p-3 md:p-6"}`}>
       <motion.div
+        id="dashboard-content"
         variants={container}
         initial="hidden"
         animate="show"
         className={`max-w-[1440px] mx-auto ${compact ? "space-y-2" : "space-y-4"}`}
       >
         <motion.div variants={item}>
-          <CommandHeader />
+          <CommandHeader onPresentationMode={() => setPresentationOpen(true)} />
         </motion.div>
 
         {/* Month Ghost - full width hero */}
@@ -62,6 +68,26 @@ const DashboardContent = () => {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Performance Gauges + Live Activity Feed */}
+        <div className={`grid grid-cols-1 lg:grid-cols-2 ${gap}`}>
+          <AnimatePresence mode="popLayout">
+            {settings.showGauges && (
+              <motion.div key="gauges" variants={item} initial="hidden" animate="show" exit={animatedExit}
+                className={compact ? "min-h-[280px]" : "min-h-[340px]"}>
+                <PerformanceGauges />
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <AnimatePresence mode="popLayout">
+            {settings.showActivityFeed && (
+              <motion.div key="activity" variants={item} initial="hidden" animate="show" exit={animatedExit}
+                className={compact ? "min-h-[280px]" : "min-h-[340px]"}>
+                <LiveActivityFeed />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
         {/* Time Machine + Leaderboard */}
         <div className={`grid grid-cols-1 lg:grid-cols-3 ${gap}`}>
@@ -145,6 +171,11 @@ const DashboardContent = () => {
       </motion.div>
 
       <SettingsDrawer />
+      <AnimatePresence>
+        {presentationOpen && (
+          <PresentationMode open={presentationOpen} onClose={() => setPresentationOpen(false)} />
+        )}
+      </AnimatePresence>
     </div>
   );
 };
