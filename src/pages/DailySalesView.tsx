@@ -72,8 +72,11 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   );
 };
 
-const DailySalesView = () => {
-  const navigate = useNavigate();
+interface DailySalesViewProps {
+  embedded?: boolean;
+}
+
+const DailySalesView = ({ embedded }: DailySalesViewProps = {}) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [preset, setPreset] = useState<Preset>("30d");
