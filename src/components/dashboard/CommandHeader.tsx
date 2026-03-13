@@ -65,15 +65,6 @@ const CommandHeader = ({ onPresentationMode }: CommandHeaderProps) => {
           </p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
-          <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => navigate("/daily")}
-              className="flex items-center gap-2 glass-card px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:border-neon-green/40 transition-all cursor-pointer"
-            >
-              <CalendarRange className="w-4 h-4 text-neon-green" />
-              <span className="font-mono text-xs">Daily View</span>
-            </motion.button>
           {onPresentationMode && (
             <motion.button
               whileHover={{ scale: 1.05 }}
