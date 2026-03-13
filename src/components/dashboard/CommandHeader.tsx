@@ -12,6 +12,7 @@ interface CommandHeaderProps {
 }
 
 const CommandHeader = ({ onPresentationMode }: CommandHeaderProps) => {
+  const navigate = useNavigate();
   const isGrowthPositive = kpis.yoyGrowth > 0;
 
   const kpiCards = [
