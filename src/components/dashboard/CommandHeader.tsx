@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { CalendarDays, TrendingUp, TrendingDown, DollarSign, Activity, BarChart3, Zap, Presentation, FileDown, Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { CalendarDays, TrendingUp, TrendingDown, DollarSign, Activity, BarChart3, Zap, Presentation, FileDown, Loader2, CalendarRange } from "lucide-react";
 import { motion } from "framer-motion";
 import AnimatedNumber from "./AnimatedNumber";
 import ContextBadge from "./ContextBadge";
@@ -11,6 +12,7 @@ interface CommandHeaderProps {
 }
 
 const CommandHeader = ({ onPresentationMode }: CommandHeaderProps) => {
+  const navigate = useNavigate();
   const isGrowthPositive = kpis.yoyGrowth > 0;
 
   const kpiCards = [
@@ -64,6 +66,15 @@ const CommandHeader = ({ onPresentationMode }: CommandHeaderProps) => {
           </p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
+          <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigate("/daily")}
+              className="flex items-center gap-2 glass-card px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:border-neon-green/40 transition-all cursor-pointer"
+            >
+              <CalendarRange className="w-4 h-4 text-neon-green" />
+              <span className="font-mono text-xs">Daily View</span>
+            </motion.button>
           {onPresentationMode && (
             <motion.button
               whileHover={{ scale: 1.05 }}
