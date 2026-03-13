@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { CalendarDays, TrendingUp, TrendingDown, DollarSign, Activity, BarChart3, Zap, Presentation, FileDown, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
-import { motion } from "framer-motion";
 import AnimatedNumber from "./AnimatedNumber";
 import ContextBadge from "./ContextBadge";
 import ExportPDF from "./ExportPDF";
