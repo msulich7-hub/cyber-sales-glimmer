@@ -1,181 +1,94 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import CommandHeader from "@/components/dashboard/CommandHeader";
-import TimeMachineChart from "@/components/dashboard/TimeMachineChart";
-import SalesLeaderboard from "@/components/dashboard/SalesLeaderboard";
-import MonthGhostChart from "@/components/dashboard/MonthGhostChart";
-import ClientMatrix from "@/components/dashboard/ClientMatrix";
-import RevenueDonut from "@/components/dashboard/RevenueDonut";
-import ForecastChart from "@/components/dashboard/ForecastChart";
-import RevenueHeatmap from "@/components/dashboard/RevenueHeatmap";
-import SalesFunnel from "@/components/dashboard/SalesFunnel";
-import RegionPerformance from "@/components/dashboard/RegionPerformance";
-import WaterfallChart from "@/components/dashboard/WaterfallChart";
-import PerformanceGauges from "@/components/dashboard/PerformanceGauges";
-import LiveActivityFeed from "@/components/dashboard/LiveActivityFeed";
-import SettingsDrawer from "@/components/dashboard/SettingsDrawer";
-import PresentationMode from "@/components/dashboard/PresentationMode";
+import { BarChart2, LayoutDashboard, Settings } from "lucide-react";
 import { DashboardProvider, useDashboardSettings } from "@/contexts/DashboardSettings";
+import DailySalesView from "@/pages/DailySalesView";
+import ExecutiveOverview from "@/components/dashboard/ExecutiveOverview";
+import SettingsDrawer from "@/components/dashboard/SettingsDrawer";
 
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.08 },
-  },
-};
+type TabKey = "daily" | "executive";
 
-const item = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
-};
+const tabs: { key: TabKey; label: string; icon: typeof BarChart2 }[] = [
+  { key: "daily", label: "Daily Sales", icon: BarChart2 },
+  { key: "executive", label: "Executive Overview", icon: LayoutDashboard },
+];
 
-const animatedExit = { opacity: 0, scale: 0.95 };
-
-const DashboardContent = () => {
-  const { settings } = useDashboardSettings();
-  const [presentationOpen, setPresentationOpen] = useState(false);
-  const compact = settings.compactMode;
-  const gap = compact ? "gap-2" : "gap-4";
+const TabBar = ({ active, onChange }: { active: TabKey; onChange: (t: TabKey) => void }) => {
+  const { setDrawerOpen } = useDashboardSettings();
 
   return (
-    <div className={`min-h-screen bg-background ${compact ? "p-2 md:p-3" : "p-3 md:p-6"}`}>
-      <motion.div
-        id="dashboard-content"
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className={`max-w-[1440px] mx-auto ${compact ? "space-y-2" : "space-y-4"}`}
-      >
-        <motion.div variants={item}>
-          <CommandHeader onPresentationMode={() => setPresentationOpen(true)} />
-        </motion.div>
-
-        {/* Month Ghost - full width hero */}
-        <AnimatePresence mode="popLayout">
-          {settings.showMonthGhost && (
-            <motion.div key="ghost" variants={item} initial="hidden" animate="show" exit={animatedExit}>
-              <MonthGhostChart />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Forecast - full width */}
-        <AnimatePresence mode="popLayout">
-          {settings.showForecast && (
-            <motion.div key="forecast" variants={item} initial="hidden" animate="show" exit={animatedExit}>
-              <ForecastChart />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Performance Gauges + Live Activity Feed */}
-        <div className={`grid grid-cols-1 lg:grid-cols-2 ${gap}`}>
-          <AnimatePresence mode="popLayout">
-            {settings.showGauges && (
-              <motion.div key="gauges" variants={item} initial="hidden" animate="show" exit={animatedExit}
-                className={compact ? "min-h-[280px]" : "min-h-[340px]"}>
-                <PerformanceGauges />
-              </motion.div>
-            )}
-          </AnimatePresence>
-          <AnimatePresence mode="popLayout">
-            {settings.showActivityFeed && (
-              <motion.div key="activity" variants={item} initial="hidden" animate="show" exit={animatedExit}
-                className={compact ? "min-h-[280px]" : "min-h-[340px]"}>
-                <LiveActivityFeed />
-              </motion.div>
-            )}
-          </AnimatePresence>
+    <div className="sticky top-0 z-50 backdrop-blur-xl bg-background/80 border-b border-border/40">
+      <div className="max-w-[1440px] mx-auto flex items-center justify-between px-3 md:px-6">
+        <div className="flex items-center gap-1">
+          {tabs.map((tab) => {
+            const isActive = active === tab.key;
+            return (
+              <button
+                key={tab.key}
+                onClick={() => onChange(tab.key)}
+                className={`relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors cursor-pointer ${
+                  isActive
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <tab.icon className="w-4 h-4" />
+                <span className="hidden sm:inline">{tab.label}</span>
+                {isActive && (
+                  <motion.div
+                    layoutId="tab-indicator"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
+                    style={{ background: "hsl(160,84%,39%)", boxShadow: "0 0 8px hsl(160,84%,39%,0.5)" }}
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  />
+                )}
+              </button>
+            );
+          })}
         </div>
+        <motion.button
+          whileHover={{ scale: 1.1, rotate: 90 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setDrawerOpen(true)}
+          className="p-2 rounded-lg text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+        >
+          <Settings className="w-4 h-4" />
+        </motion.button>
+      </div>
+    </div>
+  );
+};
 
-        {/* Time Machine + Leaderboard */}
-        <div className={`grid grid-cols-1 lg:grid-cols-3 ${gap}`}>
-          <AnimatePresence mode="popLayout">
-            {settings.showTimeMachine && (
-              <motion.div key="time" variants={item} initial="hidden" animate="show" exit={animatedExit}
-                className={`lg:col-span-2 ${compact ? "min-h-[320px]" : "min-h-[400px]"}`}>
-                <TimeMachineChart />
-              </motion.div>
-            )}
-          </AnimatePresence>
-          <AnimatePresence mode="popLayout">
-            {settings.showLeaderboard && (
-              <motion.div key="leader" variants={item} initial="hidden" animate="show" exit={animatedExit}
-                className={compact ? "min-h-[320px]" : "min-h-[400px]"}>
-                <SalesLeaderboard />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+const DashboardContent = () => {
+  const [activeTab, setActiveTab] = useState<TabKey>("daily");
 
-        {/* Heatmap + Funnel */}
-        <div className={`grid grid-cols-1 lg:grid-cols-2 ${gap}`}>
-          <AnimatePresence mode="popLayout">
-            {settings.showHeatmap && (
-              <motion.div key="heatmap" variants={item} initial="hidden" animate="show" exit={animatedExit}
-                className={compact ? "min-h-[260px]" : "min-h-[320px]"}>
-                <RevenueHeatmap />
-              </motion.div>
-            )}
-          </AnimatePresence>
-          <AnimatePresence mode="popLayout">
-            {settings.showFunnel && (
-              <motion.div key="funnel" variants={item} initial="hidden" animate="show" exit={animatedExit}
-                className={compact ? "min-h-[260px]" : "min-h-[320px]"}>
-                <SalesFunnel />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Waterfall + Regions */}
-        <div className={`grid grid-cols-1 lg:grid-cols-2 ${gap}`}>
-          <AnimatePresence mode="popLayout">
-            {settings.showWaterfall && (
-              <motion.div key="waterfall" variants={item} initial="hidden" animate="show" exit={animatedExit}
-                className={compact ? "min-h-[280px]" : "min-h-[340px]"}>
-                <WaterfallChart />
-              </motion.div>
-            )}
-          </AnimatePresence>
-          <AnimatePresence mode="popLayout">
-            {settings.showRegions && (
-              <motion.div key="regions" variants={item} initial="hidden" animate="show" exit={animatedExit}
-                className={compact ? "min-h-[280px]" : "min-h-[340px]"}>
-                <RegionPerformance />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Client Matrix + Revenue Donut */}
-        <div className={`grid grid-cols-1 lg:grid-cols-2 ${gap}`}>
-          <AnimatePresence mode="popLayout">
-            {settings.showClientMatrix && (
-              <motion.div key="client" variants={item} initial="hidden" animate="show" exit={animatedExit}
-                className={compact ? "min-h-[300px]" : "min-h-[380px]"}>
-                <ClientMatrix />
-              </motion.div>
-            )}
-          </AnimatePresence>
-          <AnimatePresence mode="popLayout">
-            {settings.showRevenueDonut && (
-              <motion.div key="donut" variants={item} initial="hidden" animate="show" exit={animatedExit}
-                className={compact ? "min-h-[300px]" : "min-h-[380px]"}>
-                <RevenueDonut />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </motion.div>
-
-      <SettingsDrawer />
-      <AnimatePresence>
-        {presentationOpen && (
-          <PresentationMode open={presentationOpen} onClose={() => setPresentationOpen(false)} />
+  return (
+    <div className="min-h-screen bg-background">
+      <TabBar active={activeTab} onChange={setActiveTab} />
+      <AnimatePresence mode="wait">
+        {activeTab === "daily" ? (
+          <motion.div
+            key="daily"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.25 }}
+          >
+            <DailySalesView embedded />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="executive"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.25 }}
+          >
+            <ExecutiveOverview />
+          </motion.div>
         )}
       </AnimatePresence>
+      <SettingsDrawer />
     </div>
   );
 };

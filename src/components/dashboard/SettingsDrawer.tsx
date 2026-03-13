@@ -27,15 +27,6 @@ const SettingsDrawer = () => {
 
   return (
     <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
-      <SheetTrigger asChild>
-        <motion.button
-          whileHover={{ scale: 1.1, rotate: 90 }}
-          whileTap={{ scale: 0.95 }}
-          className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full glass-card flex items-center justify-center border border-border hover:border-neon-blue/40 transition-colors shadow-lg hover:shadow-[0_0_20px_hsl(var(--neon-blue)/0.2)]"
-        >
-          <Settings className="w-5 h-5 text-neon-blue" />
-        </motion.button>
-      </SheetTrigger>
       <SheetContent className="glass-card border-l border-border bg-card/95 backdrop-blur-2xl w-80 overflow-y-auto">
         <SheetHeader>
           <SheetTitle className="text-foreground flex items-center gap-2">

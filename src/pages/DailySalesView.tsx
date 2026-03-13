@@ -17,7 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import AnimatedNumber from "@/components/dashboard/AnimatedNumber";
 import { dailySalesData, type DailySalesEntry } from "@/data/dailySalesData";
-import { useNavigate } from "react-router-dom";
+
 
 const formatCurrency = (v: number) => {
   if (v >= 1000000) return `$${(v / 1000000).toFixed(1)}M`;
@@ -72,8 +72,11 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   );
 };
 
-const DailySalesView = () => {
-  const navigate = useNavigate();
+interface DailySalesViewProps {
+  embedded?: boolean;
+}
+
+const DailySalesView = ({ embedded }: DailySalesViewProps = {}) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [preset, setPreset] = useState<Preset>("30d");
@@ -243,10 +246,12 @@ const DailySalesView = () => {
         <motion.div variants={item} className="glass-card p-4 md:p-6">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => navigate("/")}
-                className="glass-card p-2 hover:border-primary/30 transition-all cursor-pointer">
-                <ArrowLeft className="w-4 h-4 text-muted-foreground" />
-              </motion.button>
+              {!embedded && (
+                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => window.history.back()}
+                  className="glass-card p-2 hover:border-primary/30 transition-all cursor-pointer">
+                  <ArrowLeft className="w-4 h-4 text-muted-foreground" />
+                </motion.button>
+              )}
               <div>
                 <h1 className="text-xl md:text-2xl font-bold tracking-tight">
                   Daily Sales <span className="neon-text-green">Intelligence</span>
