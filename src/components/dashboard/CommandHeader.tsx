@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CalendarDays, TrendingUp, TrendingDown, DollarSign, Activity, BarChart3, Zap, Presentation, FileDown, Loader2, CalendarRange } from "lucide-react";
+import { CalendarDays, TrendingUp, TrendingDown, DollarSign, Activity, BarChart3, Zap, Presentation, FileDown, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import AnimatedNumber from "./AnimatedNumber";
 import ContextBadge from "./ContextBadge";
