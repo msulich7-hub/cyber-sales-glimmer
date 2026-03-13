@@ -17,7 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import AnimatedNumber from "@/components/dashboard/AnimatedNumber";
 import { dailySalesData, type DailySalesEntry } from "@/data/dailySalesData";
-import { useNavigate } from "react-router-dom";
+
 
 const formatCurrency = (v: number) => {
   if (v >= 1000000) return `$${(v / 1000000).toFixed(1)}M`;
