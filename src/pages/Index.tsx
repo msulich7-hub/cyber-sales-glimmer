@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BarChart2, LayoutDashboard, Settings } from "lucide-react";
+import { Link } from "react-router-dom";
+import { BarChart2, LayoutDashboard, LayoutGrid, Settings } from "lucide-react";
 import { DashboardProvider, useDashboardSettings } from "@/contexts/DashboardSettings";
 import DailySalesView from "@/pages/DailySalesView";
 import ExecutiveOverview from "@/components/dashboard/ExecutiveOverview";
@@ -46,14 +47,24 @@ const TabBar = ({ active, onChange }: { active: TabKey; onChange: (t: TabKey) =>
             );
           })}
         </div>
-        <motion.button
-          whileHover={{ scale: 1.1, rotate: 90 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => setDrawerOpen(true)}
-          className="p-2 rounded-lg text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-        >
-          <Settings className="w-4 h-4" />
-        </motion.button>
+        <div className="flex items-center gap-1">
+          <Link
+            to="/showcase"
+            className="p-2 rounded-lg text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2 text-xs font-medium"
+            title="20 widoków eksperckich (wzorce Tableau)"
+          >
+            <LayoutGrid className="w-4 h-4" />
+            <span className="hidden md:inline">Showcase</span>
+          </Link>
+          <motion.button
+            whileHover={{ scale: 1.1, rotate: 90 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setDrawerOpen(true)}
+            className="p-2 rounded-lg text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+          >
+            <Settings className="w-4 h-4" />
+          </motion.button>
+        </div>
       </div>
     </div>
   );
