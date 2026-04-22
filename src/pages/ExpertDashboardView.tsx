@@ -48,7 +48,7 @@ const ExpertDashboardView = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="sticky top-0 z-40 backdrop-blur-xl bg-background/80 border-b border-border/40">
+      <div className="sticky top-0 z-40 backdrop-blur-md bg-card/85 border-b border-border">
         <div className="max-w-[1440px] mx-auto px-3 md:px-6 py-3 flex items-center justify-between gap-3">
           <Link
             to="/showcase"

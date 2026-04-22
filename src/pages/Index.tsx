@@ -18,7 +18,7 @@ const TabBar = ({ active, onChange }: { active: TabKey; onChange: (t: TabKey) =>
   const { setDrawerOpen } = useDashboardSettings();
 
   return (
-    <div className="sticky top-0 z-50 backdrop-blur-xl bg-background/80 border-b border-border/40">
+    <div className="sticky top-0 z-50 backdrop-blur-md bg-card/85 border-b border-border">
       <div className="max-w-[1440px] mx-auto flex items-center justify-between px-3 md:px-6">
         <div className="flex items-center gap-1">
           {tabs.map((tab) => {
@@ -38,8 +38,8 @@ const TabBar = ({ active, onChange }: { active: TabKey; onChange: (t: TabKey) =>
                 {isActive && (
                   <motion.div
                     layoutId="tab-indicator"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
-                    style={{ background: "hsl(160,84%,39%)", boxShadow: "0 0 8px hsl(160,84%,39%,0.5)" }}
+                    className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-primary"
+                    style={{ boxShadow: "0 0 12px hsl(var(--primary) / 0.45)" }}
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   />
                 )}
