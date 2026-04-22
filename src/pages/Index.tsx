@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BarChart2, LayoutDashboard, Settings } from "lucide-react";
+import { Link } from "react-router-dom";
+import { BarChart2, LayoutDashboard, LayoutGrid, Settings } from "lucide-react";
 import { DashboardProvider, useDashboardSettings } from "@/contexts/DashboardSettings";
 import DailySalesView from "@/pages/DailySalesView";
 import ExecutiveOverview from "@/components/dashboard/ExecutiveOverview";
@@ -17,7 +18,7 @@ const TabBar = ({ active, onChange }: { active: TabKey; onChange: (t: TabKey) =>
   const { setDrawerOpen } = useDashboardSettings();
 
   return (
-    <div className="sticky top-0 z-50 backdrop-blur-xl bg-background/80 border-b border-border/40">
+    <div className="sticky top-0 z-50 backdrop-blur-md bg-card/85 border-b border-border">
       <div className="max-w-[1440px] mx-auto flex items-center justify-between px-3 md:px-6">
         <div className="flex items-center gap-1">
           {tabs.map((tab) => {
@@ -37,8 +38,8 @@ const TabBar = ({ active, onChange }: { active: TabKey; onChange: (t: TabKey) =>
                 {isActive && (
                   <motion.div
                     layoutId="tab-indicator"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
-                    style={{ background: "hsl(160,84%,39%)", boxShadow: "0 0 8px hsl(160,84%,39%,0.5)" }}
+                    className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-primary"
+                    style={{ boxShadow: "0 0 12px hsl(var(--primary) / 0.45)" }}
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   />
                 )}
@@ -46,14 +47,24 @@ const TabBar = ({ active, onChange }: { active: TabKey; onChange: (t: TabKey) =>
             );
           })}
         </div>
-        <motion.button
-          whileHover={{ scale: 1.1, rotate: 90 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => setDrawerOpen(true)}
-          className="p-2 rounded-lg text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-        >
-          <Settings className="w-4 h-4" />
-        </motion.button>
+        <div className="flex items-center gap-1">
+          <Link
+            to="/showcase"
+            className="p-2 rounded-lg text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2 text-xs font-medium"
+            title="20 widoków eksperckich (wzorce Tableau)"
+          >
+            <LayoutGrid className="w-4 h-4" />
+            <span className="hidden md:inline">Showcase</span>
+          </Link>
+          <motion.button
+            whileHover={{ scale: 1.1, rotate: 90 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setDrawerOpen(true)}
+            className="p-2 rounded-lg text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+          >
+            <Settings className="w-4 h-4" />
+          </motion.button>
+        </div>
       </div>
     </div>
   );

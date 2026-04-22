@@ -254,7 +254,7 @@ const DailySalesView = ({ embedded }: DailySalesViewProps = {}) => {
               )}
               <div>
                 <h1 className="text-xl md:text-2xl font-bold tracking-tight">
-                  Daily Sales <span className="neon-text-green">Intelligence</span>
+                  Daily Sales <span className="text-primary font-semibold">Intelligence</span>
                 </h1>
                 <p className="text-xs text-muted-foreground mt-0.5">Deep-dive into day-by-day performance</p>
               </div>
@@ -265,7 +265,7 @@ const DailySalesView = ({ embedded }: DailySalesViewProps = {}) => {
               {presets.map(p => (
                 <Button key={p.key} variant={preset === p.key ? "default" : "outline"} size="sm"
                   onClick={() => handlePreset(p.key)}
-                  className={cn("text-xs font-mono", preset === p.key && "neon-glow-green")}>
+                  className={cn("text-xs font-mono", preset === p.key && "ring-2 ring-primary/35 shadow-md shadow-primary/10")}>
                   {p.label}
                 </Button>
               ))}

@@ -56,7 +56,7 @@ const CommandHeader = ({ onPresentationMode }: CommandHeaderProps) => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="text-xl md:text-2xl font-bold tracking-tight">
-            Sales Analytics <span className="neon-text-green">Command Center</span>
+            Sales Analytics <span className="text-primary font-semibold">Command Center</span>
           </h1>
           <p className="text-sm text-muted-foreground mt-1 flex items-center gap-2">
             <Zap className="w-3 h-3 text-neon-amber" />
